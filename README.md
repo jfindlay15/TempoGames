@@ -1,4 +1,4 @@
-# TEMPO Games Coding Test
+# Tempo Games Coding Test
 A Blazor application implementing a Gaming Dashboard with user management
 
 ## Getting started
