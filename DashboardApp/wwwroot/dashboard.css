@@ -1,0 +1,93 @@
+﻿body {
+    background-color: #1a1a1a;
+    color: #fff;
+    font-family: 'Arial', sans-serif;
+}
+
+.player-info {
+    font-size: 24px; 
+    font-weight: bold;
+    margin-left: 20px; 
+}
+
+.navbar {
+    background-color: #333333;
+}
+
+.navbar-brand {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.form-control {
+    background-color: #333333;
+    border: 1px solid #666666;
+    color: #fff;
+}
+
+    .form-control::placeholder {
+        color: #999999;
+    }
+
+    .form-control:focus {
+        background-color: #444444;
+        border-color: #999999;
+        color: #fff;
+    }
+
+.btn-outline-light {
+    border-color: #666666;
+    color: #fff;
+}
+
+    .btn-outline-light:hover {
+        background-color: #666666;
+        border-color: #666666;
+        color: #fff;
+    }
+
+.card {
+    background-color: #333333;
+    border: 1px solid #666666;
+    color: #fff;
+}
+
+.card-title {
+    color: #ffffff;
+}
+
+.card-text {
+    color: #cccccc;
+}
+
+.footer {
+    background-color: #333333;
+    color: #999999;
+    text-align: center;
+}
+
+.dashboard-section {
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+    .dashboard-section h5 {
+        margin-bottom: 15px;
+        font-size: 20px;
+        font-weight: bold;
+        color: #ff9900;
+        text-align: center;
+    }
+
+    .dashboard-section p {
+        font-size: 18px;
+        color: #ffffff;
+        text-align: center;
+    }
+
+.dashboard-divider {
+    border-top: 1px solid #666666;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}

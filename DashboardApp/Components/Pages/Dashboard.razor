@@ -1,0 +1,250 @@
+﻿@page "/"
+@using DashboardApp.Models
+@rendermode InteractiveServer
+
+@inject IPlayerService playerService
+@inject PlayerStatsState PlayerState
+
+<div class="container-fluid">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">ReconOps Dashboard</a>
+        <!-- Search Bar -->
+        <EditForm Model="searchPlayer" OnValidSubmit="LoadData">
+            <DataAnnotationsValidator />
+            <div class="form-inline ml-auto d-flex ">                
+                <input @bind="searchPlayer.Name" class="form-control mr-sm-2" type="search" placeholder="Search Player" aria-label="Search">                
+                <button class="btn btn-outline-light my-2 my-sm-0 ml-2" type="submit">Search</button>
+            </div>
+            <ValidationMessage For="@(()=> searchPlayer.Name)" />
+        </EditForm>        
+        @if (playerNotFound)
+        {
+            <p class="ml-2 mb-0 text-danger" style="font-style: italic; display: @((playerNotFound) ? "inline" : "none");">Player not found.</p>
+        }
+        <!-- Player Info -->
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <span class="nav-link player-info">
+                    Player Name:    @if (PlayerState?.PlayerDashboardDto != null)
+                    {
+                        @PlayerState.PlayerDashboardDto.PlayerName
+                    }
+                </span>
+            </li>
+            <li class="nav-item">
+                <span class="nav-link player-info">
+                    Level: @if (PlayerState?.PlayerDashboardDto != null)
+                    {
+                        @PlayerState.PlayerDashboardDto.Level
+                    }
+                </span>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="row mt-4">
+        <!-- Career Stats: Time Played, Games Played, Average Kills Per Game -->
+        <div class="col-md-12 mb-2">
+            <div class="card dashboard-section">                
+                <div class="row">
+                    <div class="col-md-4">
+                        <h5 class="card-title">Time Played</h5>
+                        <p class="card-text">
+                            @if (PlayerState?.PlayerDashboardDto != null)
+                            {
+                                @PlayerState.PlayerDashboardDto.TimePlayed
+                                ;
+                            }
+                        </p>
+                    </div>
+                    <div class="col-md-4">
+                        <h5 class="card-title">Games Played</h5>
+                        <p class="card-text">
+                            @if (PlayerState?.PlayerDashboardDto != null)
+                            {
+                                @PlayerState.PlayerDashboardDto.GamesPlayed
+                            }
+                        </p>
+                    </div>
+                    <div class="col-md-4">
+                        <h5 class="card-title">Average Kills Per Game</h5>
+                        <p class="card-text">
+                            @if (PlayerState?.PlayerDashboardDto != null)
+                            {
+                                @PlayerState.PlayerDashboardDto.KillsPerGameAverage
+                            }
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- K/D Ratio, Total Kills, Total Deaths, Highest Killstreak -->
+        <div class="col-md-6 mb-2">
+            <div class="card dashboard-section">
+                <h5 class="card-title">K/D Ratio</h5>
+                <p class="card-text">
+                    @if (PlayerState?.PlayerDashboardDto != null)
+                    {
+                        @PlayerState.PlayerDashboardDto.KillsDeathsRatio
+                        ;
+                    }
+                </p>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p class="card-text">
+                            Total Kills:
+                            @if (PlayerState?.PlayerDashboardDto != null)
+                            {
+                                @PlayerState.PlayerDashboardDto.TotalKills
+                                ;
+                            }
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="card-text">
+                            Total Deaths:
+                            @if (PlayerState?.PlayerDashboardDto != null)
+                            {
+                                @PlayerState.PlayerDashboardDto.TotalDeaths
+                                ;
+                            }
+                        </p>
+                    </div>
+                </div>
+                <div class="dashboard-divider"></div>
+                <div class="card dashboard-section">                    
+                    <p class="card-text">
+                        Highest Killstreak:
+                        @if (PlayerState?.PlayerDashboardDto != null)
+                        {
+                            @PlayerState.PlayerDashboardDto.HighestKillstreak
+                            ;
+                        }
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Win/Loss Ratio, Total Wins, Total Losses, Average Kills per game -->
+        <div class="col-md-6 mb-2">
+            <div class="card dashboard-section">
+                <h5 class="card-title">Win/Loss Ratio</h5>
+                <p class="card-text">
+                    @if (PlayerState?.PlayerDashboardDto != null)
+                    {
+                        @PlayerState.PlayerDashboardDto.WinLossesRatio
+                        ;
+                    }
+
+                </p>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p class="card-text">
+                            Total Wins:
+                            @if (PlayerState?.PlayerDashboardDto != null)
+                            {
+                                @PlayerState.PlayerDashboardDto.TotalWins
+                                ;
+                            }
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="card-text">
+                            Total Losses:
+                            @if (PlayerState?.PlayerDashboardDto != null)
+                            {
+                                @PlayerState.PlayerDashboardDto.TotalLosses
+                                ;
+                            }
+                        </p>
+                    </div>
+                </div>
+                <div class="dashboard-divider"></div>
+                <div class="card dashboard-section">
+                    <p class="card-text">
+                        Highest Kills per Game:
+                        @if (PlayerState?.PlayerDashboardDto != null)
+                        {
+                            @PlayerState.PlayerDashboardDto.HighestKillsPerGame
+                            ;
+                        }
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Last 5 games played -->
+        <div class="col-md-12 mb-2">
+            <div class="card dashboard-section">
+                <h5 class="card-title">Last 5 Games Played</h5>
+                @if (PlayerState?.PlayerDashboardDto?.LastGamesPlayed != null)
+                {
+                    <table class="table table-dark">
+                        <thead>
+                            <tr>
+                                <th scope="col">Map</th>
+                                <th scope="col">Kills</th>
+                                <th scope="col">Headshots</th>
+                                <th scope="col">K/D Ratio</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var game in PlayerState.PlayerDashboardDto.LastGamesPlayed)
+                            {
+                                <tr>
+                                    <td>@game.MapName</td>
+                                    <td>@game.Kills</td>
+                                    <td>@game.Headshots</td>
+                                    <td>@game.KDRatio</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>    
+</div>
+
+<link rel="stylesheet" href="dashboard.css">
+
+
+
+@code {
+    private bool playerNotFound;
+    private SearchPlayer searchPlayer = new();    
+
+
+    public async Task LoadData()
+    {
+        PlayerDashboardDto data = null;
+
+        try
+        {
+            data = await Task.FromResult(await playerService.GetPlayerDashboardDataAsync(searchPlayer.Name));
+        }
+        catch (Exception ex)
+        {
+
+        }
+
+        if (data == null)
+        {
+            playerNotFound = true;
+        }
+        else
+        {
+            playerNotFound = false;
+            SetPlayerDashboardState(data);
+        }
+
+
+    }
+
+    private void SetPlayerDashboardState(PlayerDashboardDto dto)
+    {
+        PlayerState.SetDashboardState(dto);
+    }
+}

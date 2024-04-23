@@ -1,0 +1,23 @@
+﻿@using DashboardApp.Components.Shared
+@inherits LayoutComponentBase
+
+      <div class="container-fluid">
+          <!-- Navbar -->
+          @* <Navbar /> *@
+
+          <!-- Main Content -->
+          <div class="row mt-4">
+              <div class="col-md-12">
+                  @Body
+              </div>
+          </div>
+
+          <!-- Footer -->
+          <Footer />
+      </div>
+
+      <div id="blazor-error-ui">
+          An unhandled error has occurred.
+          <a href="" class="reload">Reload</a>
+          <a class="dismiss">🗙</a>
+      </div>
