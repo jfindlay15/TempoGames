@@ -2,6 +2,9 @@
 
 namespace DashboardApp.Models
 {
+    /// <summary>
+    /// Model to work with the Form Validation
+    /// </summary>
     public class SearchPlayer
     {
         [Required]

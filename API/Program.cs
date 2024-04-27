@@ -5,47 +5,71 @@ using Infrastructure.Mappings;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
+using Serilog;
 
-var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-builder.Services.AddDbContext<PlayerResultDbContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddScoped<IPlayerResultsRepository, PlayerResultsRepository>();
-builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
-builder.Services.AddScoped<IPlayerStatsService, PlayerStatsService>();
-builder.Services.AddMappings();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateLogger();
+try
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-    app.UseCors(policy =>
+    Log.Information("starting the API Service.");
+
+    var builder = WebApplication.CreateBuilder(args);
+    builder.Host.UseSerilog((context, loggerConfiguration) =>
     {
-        policy.WithOrigins("https://localhost:7239")
-        .AllowAnyMethod()
-        .AllowAnyHeader()
-        .WithHeaders(HeaderNames.ContentType);
+        loggerConfiguration.WriteTo.Console();
+        loggerConfiguration.ReadFrom.Configuration(context.Configuration);
     });
+
+    // Add services to the container.
+    builder.Services.AddDbContext<PlayerResultDbContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    builder.Services.AddScoped<IPlayerResultsRepository, PlayerResultsRepository>();
+    builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
+    builder.Services.AddScoped<IPlayerStatsService, PlayerStatsService>();
+    builder.Services.AddMappings();
+
+    builder.Services.AddControllers();
+    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
+
+
+    var app = builder.Build();
+
+    // Configure the HTTP request pipeline.
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+        app.UseCors(policy =>
+        {
+            policy.WithOrigins("https://localhost:7239")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .WithHeaders(HeaderNames.ContentType);
+        });
+    }
+
+    app.UseHttpsRedirection();
+
+    app.UseAuthorization();
+
+    app.MapControllers();
+    ApplyMigration(app);
+    app.Run();
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "The API service terminated unexpectedly");
+}
+finally
+{
+    Log.CloseAndFlush();
 }
 
-app.UseHttpsRedirection();
 
-app.UseAuthorization();
 
-app.MapControllers();
-ApplyMigration();
-app.Run();
-
-void ApplyMigration()
+void ApplyMigration(WebApplication app)
 {
     using (var scope = app.Services.CreateScope())
     {

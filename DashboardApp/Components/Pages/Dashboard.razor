@@ -12,12 +12,12 @@
         <!-- Search Bar -->
         <EditForm Model="searchPlayer" OnValidSubmit="LoadData">
             <DataAnnotationsValidator />
-            <div class="form-inline ml-auto d-flex ">                
-                <input @bind="searchPlayer.Name" class="form-control mr-sm-2" type="search" placeholder="Search Player" aria-label="Search">                
+            <div class="form-inline ml-auto d-flex ">
+                <input @bind="searchPlayer.Name" class="form-control mr-sm-2" type="search" placeholder="Search Player" aria-label="Search">
                 <button class="btn btn-outline-light my-2 my-sm-0 ml-2" type="submit">Search</button>
             </div>
             <ValidationMessage For="@(()=> searchPlayer.Name)" />
-        </EditForm>        
+        </EditForm>
         @if (playerNotFound)
         {
             <p class="ml-2 mb-0 text-danger" style="font-style: italic; display: @((playerNotFound) ? "inline" : "none");">Player not found.</p>
@@ -46,7 +46,7 @@
     <div class="row mt-4">
         <!-- Career Stats: Time Played, Games Played, Average Kills Per Game -->
         <div class="col-md-12 mb-2">
-            <div class="card dashboard-section">                
+            <div class="card dashboard-section">
                 <div class="row">
                     <div class="col-md-4">
                         <h5 class="card-title">Time Played</h5>
@@ -114,7 +114,7 @@
                     </div>
                 </div>
                 <div class="dashboard-divider"></div>
-                <div class="card dashboard-section">                    
+                <div class="card dashboard-section">
                     <p class="card-text">
                         Highest Killstreak:
                         @if (PlayerState?.PlayerDashboardDto != null)
@@ -205,7 +205,7 @@
                 }
             </div>
         </div>
-    </div>    
+    </div>
 </div>
 
 <link rel="stylesheet" href="dashboard.css">
@@ -214,23 +214,17 @@
 
 @code {
     private bool playerNotFound;
-    private SearchPlayer searchPlayer = new();    
+    private SearchPlayer searchPlayer = new();
 
 
     public async Task LoadData()
     {
         PlayerDashboardDto data = null;
 
-        try
-        {
-            data = await Task.FromResult(await playerService.GetPlayerDashboardDataAsync(searchPlayer.Name));
-        }
-        catch (Exception ex)
-        {
+        data = await Task.FromResult(await playerService.GetPlayerDashboardDataAsync(searchPlayer.Name));
 
-        }
 
-        if (data == null)
+        if (data == null) //Player with name not found
         {
             playerNotFound = true;
         }

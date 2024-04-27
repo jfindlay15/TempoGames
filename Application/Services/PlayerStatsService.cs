@@ -2,15 +2,17 @@
 using Application.Interfaces;
 using Application.Utilities;
 using Mapster;
+using Microsoft.Extensions.Logging;
 
 namespace Application.Logic
 {
     /// <summary>
     /// Service that does calculations for the PlayerStatsDashboardDto
     /// </summary>
+    /// <param name="logger"></param>
     /// <param name="players"></param>
     /// <param name="results"></param>
-    public class PlayerStatsService(IPlayerRepository players, IPlayerResultsRepository results) : IPlayerStatsService
+    public class PlayerStatsService(ILogger<PlayerStatsService> logger, IPlayerRepository players, IPlayerResultsRepository results) : IPlayerStatsService
     {        
         public async Task<PlayerDashboardDto> GetPlayerStats(string playerName)
         {
@@ -19,6 +21,7 @@ namespace Application.Logic
             var player = await players.GetByPlayerName(playerName);
             if (player == null)
             {
+                logger.LogInformation($"Player {playerName} not found");
                 return null!;
             }
             var playerResults = await results.GetAsync(player.id);
@@ -26,7 +29,7 @@ namespace Application.Logic
             if (playerResults.Any())
             {
                 playerDashboardDto = CalculateStats(playerResults);
-                playerDashboardDto.KillsPerGameAverage = ((playerDashboardDto.TotalKills / playerResults.Count) * 1.0m);
+                playerDashboardDto.KillsPerGameAverage = playerDashboardDto.TotalKills / playerResults.Count * 1.0m;
                 playerDashboardDto.GamesPlayed = playerResults.Count;
                 playerDashboardDto.LastGamesPlayed = GetLastGamesPlayed(playerResults, 5);
             }
