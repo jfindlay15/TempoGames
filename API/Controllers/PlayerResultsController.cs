@@ -15,7 +15,7 @@ namespace API.Controllers
         {
             var data = await service.GetPlayerStats(playerName);
 
-            if(data==null)
+            if (data == null)
             {
                 return new NotFoundResult();
             }

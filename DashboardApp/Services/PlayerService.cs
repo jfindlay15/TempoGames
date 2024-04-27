@@ -1,26 +1,24 @@
 ﻿using Application.Dtos;
+using Application.Interfaces;
 
 namespace DashboardApp.Services
 {
-    public interface IPlayerService
+    public class PlayerService(ILogger<PlayerService> logger, HttpClient httpClient) : IPlayerService
     {
-        Task<PlayerDashboardDto> GetPlayerDashboardDataAsync(string playerName);
-    }
-
-    public class PlayerService(HttpClient httpClient) : IPlayerService
-    {
-        public async Task<PlayerDashboardDto> GetPlayerDashboardDataAsync(string playerName)
+        public async Task<PlayerDashboardDto?> GetPlayerDashboardDataAsync(string playerName)
         {
+            PlayerDashboardDto? data = null;
             try
             {
-                var data = await httpClient.GetFromJsonAsync<PlayerDashboardDto>($"api/PlayerResults/{playerName}");
+                data = await httpClient.GetFromJsonAsync<PlayerDashboardDto>($"api/PlayerResults/{playerName}");
                 return data;
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message, ex);
+                logger.LogError(ex.Message, ex);
             }
-            
+
+            return null;
         }
     }
 }

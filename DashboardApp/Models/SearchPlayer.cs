@@ -8,6 +8,6 @@ namespace DashboardApp.Models
     public class SearchPlayer
     {
         [Required]
-        public string? Name { get; set; }
+        public string Name { get; set; } = string.Empty;
     }
 }

@@ -1,3 +1,4 @@
+using Application.Interfaces;
 using DashboardApp.Components;
 using DashboardApp.Services;
 using DashboardApp.UserState;

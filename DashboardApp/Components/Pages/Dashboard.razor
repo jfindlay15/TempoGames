@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using Application.Interfaces
 @using DashboardApp.Models
 @rendermode InteractiveServer
 
@@ -214,15 +215,11 @@
 
 @code {
     private bool playerNotFound;
-    private SearchPlayer searchPlayer = new();
-
+    private SearchPlayer searchPlayer = new SearchPlayer();
 
     public async Task LoadData()
     {
-        PlayerDashboardDto data = null;
-
-        data = await Task.FromResult(await playerService.GetPlayerDashboardDataAsync(searchPlayer.Name));
-
+        var data = await Task.FromResult(await playerService.GetPlayerDashboardDataAsync(searchPlayer?.Name!));
 
         if (data == null) //Player with name not found
         {
