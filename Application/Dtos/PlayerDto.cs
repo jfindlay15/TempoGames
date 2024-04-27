@@ -1,4 +1,9 @@
-﻿namespace Application.Dtos
+﻿namespace Application.Dtos;
+
+public class PlayerDto()
 {
-    public record PlayerDto(int id, string name, string rank, int level);
+    public int Id { get; set; }
+    public string? Name { get; set; }
+    public int Level { get; set; }
+
 }

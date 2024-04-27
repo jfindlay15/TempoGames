@@ -1,16 +1,19 @@
 ﻿namespace Application.Dtos
 {
     /// <summary>
-    /// Dto containg stats of player information
-    /// </summary>
-    /// <param name="PlayerId"></param>
-    /// <param name="Headshots"></param>
-    /// <param name="Kills"></param>
-    /// <param name="Deaths"></param>
-    /// <param name="WonGame"></param>
-    /// <param name="KillStreak"></param>
-    /// <param name="GameDuration"></param>
-    /// <param name="StartTime"></param>
-    /// <param name="MapName"></param>
-    public record PlayerResultDto(int PlayerId, int Headshots, int Kills, int Deaths, bool WonGame, int KillStreak, int GameDuration, DateTime StartTime, string MapName);    
+    /// Dto contains stats of player information
+    /// </summary>    
+    public class PlayerResultDto()
+    {
+        public int PlayerId { get; set; }
+        public int Headshots { get; set; }
+        public int Kills { get; set; }
+        public int Deaths { get; set; }
+        public bool WonGame { get; set; }
+        public int KillStreak { get; set; }
+        public int GameDuration { get; set; }
+        public DateTime StartTime { get; set; }
+        public string? MapName { get; set; }
+    }
+
 }

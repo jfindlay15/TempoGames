@@ -24,7 +24,7 @@ namespace Application.Logic
                 logger.LogInformation($"Player {playerName} not found");
                 return null!;
             }
-            var playerResults = await results.GetAsync(player.id);
+            var playerResults = await results.GetAsync(player.Id);
 
             if (playerResults.Any())
             {
@@ -34,8 +34,8 @@ namespace Application.Logic
                 playerDashboardDto.LastGamesPlayed = GetLastGamesPlayed(playerResults, 5);
             }
 
-            playerDashboardDto.PlayerName = player.name;
-            playerDashboardDto.Level = player.level;
+            playerDashboardDto.PlayerName = player.Name;
+            playerDashboardDto.Level = player.Level;
 
             return playerDashboardDto;
         }
